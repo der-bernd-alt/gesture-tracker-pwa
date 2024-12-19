@@ -20,6 +20,13 @@
       </button>
     </div>
   </div>
-
+  
   <app-drag-circle></app-drag-circle>
+  <div class="update-control">
+    <mat-checkbox 
+      [checked]="allowUpdates$ | async"
+      (change)="onUpdateToggle($event)">
+      Update durchführen
+    </mat-checkbox>
+  </div>
 </div> 

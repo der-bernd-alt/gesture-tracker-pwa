@@ -13,4 +13,9 @@
     <mat-icon *ngIf="!isDragging && !isLoading && !isSuccess">add</mat-icon>
     <mat-icon *ngIf="!isDragging && !isLoading && isSuccess">check</mat-icon>
   </div>
+  <div class="drag-overlay"
+       [style.transform]="'translateY(' + circlePosition + 'px)'"
+       (touchstart)="startDrag($event)"
+       (mousedown)="startDrag($event)">
+  </div>
 </div> 

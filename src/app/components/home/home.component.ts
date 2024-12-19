@@ -1,27 +1,36 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { AddPushUpsDialogComponent } from '../add-push-ups-dialog/add-push-ups-dialog.component';
 import { DatabaseService } from '../../services/database.service';
 import { PushUpSet } from '../../models/push-up-set.model';
+import { MatCheckboxChange } from '@angular/material/checkbox';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   pushUpSets: PushUpSet[] = [];
   activeView: 'graph' | 'history' = 'graph';
+  allowUpdates$: Observable<boolean>;
 
   constructor(
     private dialog: MatDialog,
     private databaseService: DatabaseService
-  ) {}
+  ) {
+    this.allowUpdates$ = this.databaseService.getAllowUpdates();
+  }
 
   ngOnInit() {
     this.databaseService.getPushUpSets().subscribe((sets: PushUpSet[]) => {
       this.pushUpSets = sets;
     });
+  }
+
+  onUpdateToggle(event: MatCheckboxChange) {
+    this.databaseService.setAllowUpdates(event.checked);
   }
 
   openAddDialog() {

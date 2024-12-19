@@ -1,5 +1,5 @@
 .home-container {
-  height: 100vh;
+  height: 85vh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -46,4 +46,12 @@
 
 mat-icon {
   margin-right: 8px;
+}
+
+.update-control {
+  padding: 8px 16px;
+  display: flex;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.02);
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
 } 

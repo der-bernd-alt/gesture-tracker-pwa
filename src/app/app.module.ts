@@ -25,6 +25,7 @@ import { FormsModule } from '@angular/forms';
 import { VerticalSliderComponent } from './components/vertical-slider/vertical-slider.component';
 import { DragCircleComponent } from './components/drag-circle/drag-circle.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 Chart.register(
   TimeScale,
@@ -58,6 +59,7 @@ Chart.register(
     MatSliderModule,
     FormsModule,
     MatProgressSpinnerModule,
+    MatCheckboxModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -8,6 +8,7 @@
   display: flex;
   justify-content: center;
   align-items: flex-end;
+  z-index: 500;
 }
 
 .track {
@@ -20,6 +21,7 @@
   border-radius: 36px;
   opacity: 0;
   transition: opacity 0.3s ease;
+  z-index: 500;
 }
 
 .track.visible {
@@ -36,6 +38,7 @@
   transform: translateY(-50%);
   opacity: 0;
   transition: opacity 0.3s ease;
+  z-index: 500;
 }
 
 .value-display.visible {
@@ -51,11 +54,13 @@
   border-radius: 50%;
   cursor: grab;
   box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-  transition: transform 0.3s ease, box-shadow 0.2s ease;
+  transition: box-shadow 0.2s ease;
   touch-action: none;
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 500;
+  pointer-events: none;
 }
 
 .circle:active {
@@ -72,4 +77,23 @@
   font-size: 43px;
   width: 43px;
   height: 43px;
-} 
+}
+
+.drag-overlay {
+  position: absolute;
+  width: 72px;
+  height: 72px;
+  background: transparent;
+  border-radius: 50%;
+  opacity: 0.1;
+  cursor: grab;
+  touch-action: none;
+  z-index: 550;
+  bottom: 70px;
+  left: 0;
+}
+
+.drag-overlay:active {
+  cursor: grabbing;
+}
+ 
