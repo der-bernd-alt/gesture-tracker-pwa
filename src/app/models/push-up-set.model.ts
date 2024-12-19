@@ -1,5 +1,5 @@
 export interface PushUpSet {
   id: number;
-  reps: number;
-  timestamp: Date;
+  repetitions: number;
+  time: string | Date;
 } 

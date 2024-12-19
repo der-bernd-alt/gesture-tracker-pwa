@@ -19,18 +19,30 @@ export class DatabaseService {
   }
 
   addPushUpSet(repetitions: number): Observable<PushUpSet> {
-    return this.http.post<PushUpSet>(`${this.apiUrl}/push-up-sets`, { repetitions });
+    return this.http.post<PushUpSet>(`${this.apiUrl}/push-up-sets`, { repetitions })
+      .pipe(
+        tap(newSet => {
+          const currentSets = this.pushUpSets.value;
+          this.pushUpSets.next([newSet, ...currentSets]);
+        })
+      );
   }
 
-  private loadPushUpSets() {
-    this.http.get<PushUpSet[]>(`${this.apiUrl}/push-up-sets`)
+  private loadPushUpSets(returnAll: boolean = false) {
+    const params = returnAll ? { return_all: 'true' } : { return_all: 'false' };
+    
+    this.http.get<PushUpSet[]>(`${this.apiUrl}/push-up-sets`, { params })
       .pipe(
         tap(sets => {
-          console.log('✅ Successfully loaded push-up sets');
+          console.log(`✅ Successfully loaded push-up sets (${returnAll ? 'all time' : 'past 90 days'})`);
           console.log(`📊 Total sets: ${sets.length}`);
           console.log('📝 Latest 3 sets:', sets.slice(0, 3));
         })
       )
       .subscribe(sets => this.pushUpSets.next(sets));
+  }
+
+  loadAllPushUpSets() {
+    this.loadPushUpSets(true);
   }
 }
