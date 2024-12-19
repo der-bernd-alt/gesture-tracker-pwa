@@ -42,3 +42,10 @@ testem.log
 Thumbs.db
 .vercel
 .angular
+
+# Environment files
+.env
+
+# Custom workaround env files
+src/app/workaround-env/*
+!src/app/workaround-env/example.ts

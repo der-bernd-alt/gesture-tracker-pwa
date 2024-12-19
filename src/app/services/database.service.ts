@@ -2,12 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { PushUpSet } from '../models/push-up-set.model';
+import { apiUrl } from '../workaround-env/api'
 
 @Injectable({
   providedIn: 'root'
 })
 export class DatabaseService {
-  private apiUrl = 'http://localhost:3000/api';
+  private apiUrl = `${apiUrl}/api`;
   private pushUpSets = new BehaviorSubject<PushUpSet[]>([]);
 
   constructor(private http: HttpClient) {
@@ -30,7 +31,7 @@ export class DatabaseService {
 
   private loadPushUpSets(returnAll: boolean = false) {
     const params = returnAll ? { return_all: 'true' } : { return_all: 'false' };
-    
+
     this.http.get<PushUpSet[]>(`${this.apiUrl}/push-up-sets`, { params })
       .pipe(
         tap(sets => {

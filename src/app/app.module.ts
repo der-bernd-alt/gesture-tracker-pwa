@@ -26,7 +26,6 @@ import { VerticalSliderComponent } from './components/vertical-slider/vertical-s
 import { DragCircleComponent } from './components/drag-circle/drag-circle.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-
 Chart.register(
   TimeScale,
   LinearScale,
@@ -58,7 +57,7 @@ Chart.register(
     MatButtonModule,
     MatSliderModule,
     FormsModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
