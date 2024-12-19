@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { PushUpSet } from '../models/push-up-set.model';
-import { apiUrl } from '../workaround-env/api'
 
 @Injectable({
   providedIn: 'root'
