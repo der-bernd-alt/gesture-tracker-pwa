@@ -8,7 +8,7 @@ import { apiUrl } from '../workaround-env/api'
   providedIn: 'root'
 })
 export class DatabaseService {
-  private apiUrl = `${apiUrl}/api`;
+  private apiUrl = `${'https://fitness-tracker-api-ten.vercel.app'}/api`;
   private pushUpSets = new BehaviorSubject<PushUpSet[]>([]);
 
   constructor(private http: HttpClient) {
