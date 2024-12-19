@@ -9,4 +9,23 @@
 
 .sample-graphic {
   text-align: center;
+}
+
+.chart-container {
+  height: 70vh;
+  width: 100%;
+  position: relative;
+}
+
+canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.container {
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 } 

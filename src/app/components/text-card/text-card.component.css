@@ -2,9 +2,44 @@
   padding: 20px;
   height: 100%;
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-mat-card {
+.day-card {
   max-width: 600px;
   margin: 0 auto;
+  width: 100%;
+}
+
+mat-card-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.total-reps {
+  color: #666;
+}
+
+.set-list {
+  margin-top: 8px;
+}
+
+.set-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 1.1rem;
+}
+
+.time {
+  color: #666;
+  font-size: 1.2rem;
+}
+
+.reps {
+  font-weight: 500;
 } 

@@ -1,13 +1,18 @@
 <div class="card-container">
-  <mat-card>
+  <mat-card *ngFor="let day of dailyPushUps" class="day-card">
     <mat-card-header>
-      <mat-card-title>Sample Card</mat-card-title>
+      <mat-card-title>
+        <span>{{ formatDate(day.date) }}</span>
+        <span class="total-reps">{{ day.totalReps }}</span>
+      </mat-card-title>
     </mat-card-header>
     <mat-card-content>
-      <p>
-        This is a simple card component displaying some text content.
-        You can add more text or other content here as needed.
-      </p>
+      <div class="set-list">
+        <div *ngFor="let set of day.sets" class="set-item">
+          <span class="time">{{ formatTime(set.time) }}</span>
+          <span class="reps">{{ set.repetitions }}</span>
+        </div>
+      </div>
     </mat-card-content>
   </mat-card>
-</div> 
+</div>

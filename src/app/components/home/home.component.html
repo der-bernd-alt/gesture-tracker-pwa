@@ -1,10 +1,25 @@
 <div class="home-container">
-  <mat-tab-group mat-align-tabs="bottom" class="tab-group">
-    <mat-tab label="Graphical">
-      <app-graphical-display></app-graphical-display>
-    </mat-tab>
-    <mat-tab label="Text">
-      <app-text-card></app-text-card>
-    </mat-tab>
-  </mat-tab-group>
+  <div class="content">
+    <app-graphical-display *ngIf="activeView === 'graph'"></app-graphical-display>
+    <app-text-card *ngIf="activeView === 'history'" [sets]="pushUpSets"></app-text-card>
+  </div>
+
+  <div class="bottom-controls">
+    <div class="nav-buttons">
+      <button mat-button 
+              [class.active]="activeView === 'graph'"
+              (click)="activeView = 'graph'">
+        <mat-icon>show_chart</mat-icon>
+        Diagramm
+      </button>
+      <button mat-button 
+              [class.active]="activeView === 'history'"
+              (click)="activeView = 'history'">
+        <mat-icon>history</mat-icon>
+        Historie
+      </button>
+    </div>
+  </div>
+
+  <app-drag-circle></app-drag-circle>
 </div> 

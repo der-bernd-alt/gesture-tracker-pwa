@@ -1,0 +1,75 @@
+.drag-container {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 0;
+  width: 72px;
+  height: 70vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+}
+
+.track {
+  position: absolute;
+  bottom: 70px;
+  width: 72px;
+  height: calc(100% - 72px);
+  background-color: lightgrey;
+  border: 2px solid darkgrey;
+  border-radius: 36px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.track.visible {
+  opacity: 1;
+}
+
+.value-display {
+  position: absolute;
+  left: -40px;
+  background: #1976d2;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transform: translateY(-50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.value-display.visible {
+  opacity: 1;
+}
+
+.circle {
+  position: absolute;
+  bottom: 70px;
+  width: 72px;
+  height: 72px;
+  background: darkgrey;
+  border-radius: 50%;
+  cursor: grab;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  transition: transform 0.3s ease, box-shadow 0.2s ease;
+  touch-action: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.circle:active {
+  cursor: grabbing;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+}
+
+.circle mat-spinner {
+  --mdc-circular-progress-active-indicator-color: white;
+}
+
+.circle mat-icon {
+  color: white;
+  font-size: 43px;
+  width: 43px;
+  height: 43px;
+} 

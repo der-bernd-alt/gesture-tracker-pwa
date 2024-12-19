@@ -10,6 +10,7 @@ import { DatabaseService } from '../../services/database.service';
 export class GraphicalDisplayComponent implements OnInit {
   @ViewChild('chartCanvas') chartCanvas!: ElementRef;
   private chart?: Chart;
+  testValue = 20;
 
   constructor(private databaseService: DatabaseService) {}
 

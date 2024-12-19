@@ -11,6 +11,21 @@ import { PointElement } from 'chart.js';
 import { LineElement } from 'chart.js';
 import { Title } from 'chart.js';
 import { Legend } from 'chart.js';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule, MatFabButton } from '@angular/material/button';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { HomeComponent } from './components/home/home.component';
+import { GraphicalDisplayComponent } from './components/graphical-display/graphical-display.component';
+import { TextCardComponent } from './components/text-card/text-card.component';
+import { AddPushUpsDialogComponent } from './components/add-push-ups-dialog/add-push-ups-dialog.component';
+import { MatSliderModule } from '@angular/material/slider';
+import { FormsModule } from '@angular/forms';
+import { VerticalSliderComponent } from './components/vertical-slider/vertical-slider.component';
+import { DragCircleComponent } from './components/drag-circle/drag-circle.component';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 
 Chart.register(
   TimeScale,
@@ -21,18 +36,15 @@ Chart.register(
   Legend,
 );
 
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { HomeComponent } from './components/home/home.component';
-import { GraphicalDisplayComponent } from './components/graphical-display/graphical-display.component';
-import { TextCardComponent } from './components/text-card/text-card.component';
-
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     GraphicalDisplayComponent,
-    TextCardComponent
+    TextCardComponent,
+    AddPushUpsDialogComponent,
+    VerticalSliderComponent,
+    DragCircleComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +52,13 @@ import { TextCardComponent } from './components/text-card/text-card.component';
     BrowserAnimationsModule,
     MatTabsModule,
     MatCardModule,
-    HttpClientModule
+    HttpClientModule,
+    MatDialogModule,
+    MatIconModule,
+    MatButtonModule,
+    MatSliderModule,
+    FormsModule,
+    MatProgressSpinnerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

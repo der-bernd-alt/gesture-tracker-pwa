@@ -1,0 +1,16 @@
+<div class="drag-container">
+  <div class="track" [class.visible]="isDragging">
+    <div class="value-display" [class.visible]="isDragging">
+      {{ currentValue }}
+    </div>
+  </div>
+  <div class="circle" 
+       #circle
+       [style.transform]="'translateY(' + circlePosition + 'px)'"
+       (touchstart)="startDrag($event)"
+       (mousedown)="startDrag($event)">
+    <mat-spinner *ngIf="isLoading" [diameter]="36"></mat-spinner>
+    <mat-icon *ngIf="!isDragging && !isLoading && !isSuccess">add</mat-icon>
+    <mat-icon *ngIf="!isDragging && !isLoading && isSuccess">check</mat-icon>
+  </div>
+</div> 

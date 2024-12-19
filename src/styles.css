@@ -9,3 +9,31 @@ html, body {
 body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+.bottom-dialog {
+  border-radius: 16px 16px 0 0 !important;
+  margin: 0 !important;
+}
+
+.bottom-dialog .mat-dialog-container {
+  border-radius: 16px 16px 0 0;
+  padding: 0;
+}
+
+.bottom-dialog.mat-dialog-container {
+  transform: translateY(100%);
+  animation: slideUp 300ms forwards;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+.cdk-overlay-pane {
+  transition: transform 300ms cubic-bezier(0.4, 0.0, 0.2, 1);
+}
