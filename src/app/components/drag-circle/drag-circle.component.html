@@ -1,8 +1,8 @@
 <div class="drag-container">
+  <div class="value-label" *ngIf="isDragging">
+    {{ currentValue }}
+  </div>
   <div class="track" [class.visible]="isDragging">
-    <div class="value-display" [class.visible]="isDragging">
-      {{ currentValue }}
-    </div>
   </div>
   <div class="circle" 
        #circle

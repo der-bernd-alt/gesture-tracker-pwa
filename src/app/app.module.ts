@@ -22,7 +22,6 @@ import { TextCardComponent } from './components/text-card/text-card.component';
 import { AddPushUpsDialogComponent } from './components/add-push-ups-dialog/add-push-ups-dialog.component';
 import { MatSliderModule } from '@angular/material/slider';
 import { FormsModule } from '@angular/forms';
-import { VerticalSliderComponent } from './components/vertical-slider/vertical-slider.component';
 import { DragCircleComponent } from './components/drag-circle/drag-circle.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -43,7 +42,6 @@ Chart.register(
     GraphicalDisplayComponent,
     TextCardComponent,
     AddPushUpsDialogComponent,
-    VerticalSliderComponent,
     DragCircleComponent
   ],
   imports: [

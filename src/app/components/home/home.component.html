@@ -4,29 +4,23 @@
     <app-text-card *ngIf="activeView === 'history'" [sets]="pushUpSets"></app-text-card>
   </div>
 
+  <div class="update-control">
+    <mat-checkbox [checked]="allowUpdates$ | async" (change)="onUpdateToggle($event)">
+      Update durchführen
+    </mat-checkbox>
+  </div>
   <div class="bottom-controls">
     <div class="nav-buttons">
-      <button mat-button 
-              [class.active]="activeView === 'graph'"
-              (click)="activeView = 'graph'">
+      <button mat-button [class.active]="activeView === 'graph'" (click)="activeView = 'graph'">
         <mat-icon>show_chart</mat-icon>
         Diagramm
       </button>
-      <button mat-button 
-              [class.active]="activeView === 'history'"
-              (click)="activeView = 'history'">
+      <button mat-button [class.active]="activeView === 'history'" (click)="activeView = 'history'">
         <mat-icon>history</mat-icon>
         Historie
       </button>
     </div>
   </div>
-  
+
   <app-drag-circle></app-drag-circle>
-  <div class="update-control">
-    <mat-checkbox 
-      [checked]="allowUpdates$ | async"
-      (change)="onUpdateToggle($event)">
-      Update durchführen
-    </mat-checkbox>
-  </div>
-</div> 
+</div>

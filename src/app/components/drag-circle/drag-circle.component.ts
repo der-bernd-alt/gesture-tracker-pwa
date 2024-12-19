@@ -55,6 +55,7 @@ export class DragCircleComponent {
             next: () => {
               this.isLoading = false;
               this.isSuccess = true;
+              this.databaseService.setAllowUpdates(false);
               setTimeout(() => {
                 this.isSuccess = false;
               }, 1500); // Show checkmark for 1.5 seconds

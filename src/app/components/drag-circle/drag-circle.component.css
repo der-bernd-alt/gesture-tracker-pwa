@@ -96,4 +96,22 @@
 .drag-overlay:active {
   cursor: grabbing;
 }
+
+.value-label {
+  position: absolute;
+  top: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: darkgrey;
+  color: white;
+  border-radius: 50%;
+  width: 72px;
+  height: 72px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 3em;
+  opacity: 0.9;
+  z-index: 600;
+}
  

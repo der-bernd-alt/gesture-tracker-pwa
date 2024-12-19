@@ -79,7 +79,7 @@ export class GraphicalDisplayComponent implements OnInit, AfterViewInit {
         data: {
           labels: labels,
           datasets: [{
-            label: 'Wiederholungen heute',
+            label: "",
             data: halfHourData,
             borderColor: 'rgb(105, 105, 105)', // Dark grey color
             tension: 0.1,
