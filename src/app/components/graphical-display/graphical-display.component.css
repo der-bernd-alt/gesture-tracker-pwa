@@ -12,14 +12,23 @@
 }
 
 .chart-container {
-  width: 100%;
-  position: relative;
-}
-
-.container {
   padding: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 50vh;
-} 
+}
+
+.btn-group {
+  display: flex;
+  justify-content: center;
+  border: none;
+}
+
+.tab-button {
+  border-right: 1px solid #ccc;
+}
+
+.tab-button:last-child {
+  border-right: none;
+}

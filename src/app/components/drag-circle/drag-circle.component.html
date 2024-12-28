@@ -1,5 +1,5 @@
 <div class="drag-container">
-  <div class="value-label" *ngIf="isDragging">
+  <div class="value-label font-weight-bold bg-primary text-white" *ngIf="isDragging" [ngStyle]="{'font-size': getValueLabelSize(currentValue)}">
     {{ currentValue }}
   </div>
   <div class="track" [class.visible]="isDragging">

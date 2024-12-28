@@ -51,4 +51,8 @@ export class HomeComponent implements OnInit {
       }
     });
   }
+
+  setActiveView(view: 'history' | 'graph'): void {
+    this.activeView = view;
+  }
 } 

@@ -84,4 +84,10 @@ export class DragCircleComponent {
       event.preventDefault();
     }
   }
+
+  getValueLabelSize(value: number): string {
+    const minValue = 15, maxValue = 25, minSize = 25, maxSize = 35;
+    const scaleFactor = (value - minValue) / (maxValue - minValue);
+    return `${minSize + (maxSize - minSize) * scaleFactor}px`;
+  }
 } 

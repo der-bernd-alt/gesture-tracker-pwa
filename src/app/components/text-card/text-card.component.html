@@ -1,18 +1,24 @@
 <div class="card-container">
-  <mat-card *ngFor="let day of dailyPushUps" class="day-card">
-    <mat-card-header>
-      <mat-card-title>
-        <span>{{ formatDate(day.date) }}</span>
-        <span class="total-reps">{{ day.totalReps }}</span>
-      </mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
+  <div *ngFor="let day of dailyPushUps" class="card border-primary">
+    <div class="card-header p-2 bg-primary text-white">
+      <div class="row">
+        <div class="col">
+          <div class="card-title">
+            <h2>{{ formatDate(day.date) }}</h2>
+          </div>
+        </div>
+        <div class="col text-end">
+          <h2>{{ day.totalReps }}</h2>
+        </div>
+      </div>
+    </div>
+    <div class="card-content p-2">
       <div class="set-list">
         <div *ngFor="let set of day.sets" class="set-item">
           <span class="time">{{ formatTime(set.time) }}</span>
           <span class="reps">{{ set.repetitions }}</span>
         </div>
       </div>
-    </mat-card-content>
-  </mat-card>
+    </div>
+  </div>
 </div>

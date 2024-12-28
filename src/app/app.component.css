@@ -1,1 +1,11 @@
 /* Clear existing styles */
+
+:global(.primary) {
+  color: #007bff; /* Dark blue */
+  background-color: #007bff;
+}
+
+:global(.secondary) {
+  color: #6B7280; /* Light blue */
+  background-color: #6B7280;
+}
