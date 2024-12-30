@@ -78,7 +78,7 @@ export class GraphicalDisplayComponent implements OnInit, AfterViewInit {
         labels = [];
         for (let i = 0; i < 48; i++) { // 48 half-hour slots in a day
           if (i % 2 === 0) {
-            labels.push(`${i / 2}:00 Uhr`);
+            labels.push(`${i / 2} Uhr`);
           } else {
             labels.push(`${Math.floor(i / 2)}:30 Uhr`);
           }
@@ -102,7 +102,7 @@ export class GraphicalDisplayComponent implements OnInit, AfterViewInit {
         labels = [];
         data = Array(7).fill(0); // 7 days
         for (let i = 0; i < 7; i++) {
-          labels.push(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][i]); // Start week on Monday
+          labels.push(['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'][i]);
         }
 
         filteredSets.forEach(set => {
