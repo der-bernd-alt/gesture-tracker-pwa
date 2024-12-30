@@ -10,7 +10,6 @@ import { DatabaseService } from '../../services/database.service';
 export class GraphicalDisplayComponent implements OnInit, AfterViewInit {
   @ViewChild('chartCanvas') chartCanvas!: ElementRef;
   private chart?: Chart;
-  testValue = 20;
   timeFrame: 'today' | 'week' | 'month' = 'today';
 
   constructor(private databaseService: DatabaseService) {}
@@ -26,6 +25,18 @@ export class GraphicalDisplayComponent implements OnInit, AfterViewInit {
   setTimeFrame(frame: 'today' | 'week' | 'month') {
     this.timeFrame = frame;
     this.initializeChart(); // Re-initialize the chart with the new time frame
+  }
+
+  getExpectedValueForInterval(interval: 'today' | 'week' | 'month') {
+    let days = 1;
+    const expectedPerDay = 100, additional = 50
+    if (interval === 'week') {
+      days = 7;
+    } else if (interval === 'month') {
+      let date = new Date();
+      days = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+    }
+    return Math.round(days * (expectedPerDay + additional));
   }
 
   private initializeChart() {
@@ -67,9 +78,9 @@ export class GraphicalDisplayComponent implements OnInit, AfterViewInit {
         labels = [];
         for (let i = 0; i < 48; i++) { // 48 half-hour slots in a day
           if (i % 2 === 0) {
-            labels.push(`${i / 2}:00`);
+            labels.push(`${i / 2}:00 Uhr`);
           } else {
-            labels.push(`${Math.floor(i / 2)}:30`);
+            labels.push(`${Math.floor(i / 2)}:30 Uhr`);
           }
           data[i] = 0;
         }
@@ -87,20 +98,17 @@ export class GraphicalDisplayComponent implements OnInit, AfterViewInit {
           data[i] = accumulatedSum;
         }
       } else if (this.timeFrame === 'week') {
-        // Initialize day slots for the week, each day split into two halves
+        // Initialize day slots for the week, each day represented once
         labels = [];
-        data = Array(14).fill(0); // 7 days * 2
+        data = Array(7).fill(0); // 7 days
         for (let i = 0; i < 7; i++) {
-          labels.push(`${['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][i]} AM`);
-          labels.push(`${['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][i]} PM`);
+          labels.push(['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'][i]); // Start week on Monday
         }
 
         filteredSets.forEach(set => {
           const setDate = new Date(set.time);
-          const day = setDate.getDay();
-          const half = setDate.getHours() < 12 ? 0 : 1;
-          const index = day * 2 + half;
-          data[index] += set.repetitions;
+          const day = (setDate.getDay() + 6) % 7; // Adjust to start week on Monday
+          data[day] += set.repetitions;
         });
 
         // Calculate accumulated sums
@@ -132,7 +140,6 @@ export class GraphicalDisplayComponent implements OnInit, AfterViewInit {
           data[i] = accumulatedSum;
         }
       }
-
       this.chart = new Chart(this.chartCanvas.nativeElement, {
         type: 'line',
         data: {
@@ -140,7 +147,7 @@ export class GraphicalDisplayComponent implements OnInit, AfterViewInit {
           datasets: [{
             label: "",
             data: data,
-            borderColor: 'rgb(105, 105, 105)', // Dark grey color
+            borderColor: 'darkblue', // Dark blue color
             tension: 0.1,
             pointRadius: 0 // Do not display points
           }]
@@ -149,7 +156,8 @@ export class GraphicalDisplayComponent implements OnInit, AfterViewInit {
           responsive: true,
           scales: {
             y: {
-              beginAtZero: true
+              beginAtZero: true,
+              max: this.getExpectedValueForInterval(this.timeFrame) // Set max based on time frame
             }
           },
           layout: {
@@ -159,6 +167,22 @@ export class GraphicalDisplayComponent implements OnInit, AfterViewInit {
             }
           },
           maintainAspectRatio: false,
+          plugins: {
+            tooltip: {
+              enabled: true, // Enable tooltips
+              mode: 'index', // Show tooltip for the index of the clicked point
+              intersect: false, // Allow tooltips to show when hovering over the chart
+              callbacks: {
+                label: (tooltipItem) => {
+                  // Add " Uhr" suffix only for the 'today' time frame
+                  return `Bis hier ${tooltipItem.raw} Wdh.`; // Customize tooltip label
+                }
+              }
+            },
+            legend: {
+              display: false // Do not show the legend
+            }
+          }
         }
       });
     });
