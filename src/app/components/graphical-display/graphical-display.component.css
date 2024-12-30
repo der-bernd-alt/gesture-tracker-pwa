@@ -11,11 +11,8 @@
   text-align: center;
 }
 
-.chart-container {
+.chart-canvas {
   padding: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
   height: 50vh;
 }
 

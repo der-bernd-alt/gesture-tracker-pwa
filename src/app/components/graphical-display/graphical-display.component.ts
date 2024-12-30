@@ -11,7 +11,7 @@ export class GraphicalDisplayComponent implements OnInit, AfterViewInit {
   @ViewChild('chartCanvas') chartCanvas!: ElementRef;
   private chart?: Chart;
   testValue = 20;
-  timeFrame: 'today' | 'week' | 'month' = 'today'; // Default time frame
+  timeFrame: 'today' | 'week' | 'month' = 'today';
 
   constructor(private databaseService: DatabaseService) {}
 
@@ -158,7 +158,7 @@ export class GraphicalDisplayComponent implements OnInit, AfterViewInit {
               bottom: 30
             }
           },
-          maintainAspectRatio: false, // Adjust the config to take as much space as possible
+          maintainAspectRatio: false,
         }
       });
     });

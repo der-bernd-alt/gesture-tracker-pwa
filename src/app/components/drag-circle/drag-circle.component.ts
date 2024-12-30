@@ -42,7 +42,7 @@ export class DragCircleComponent {
         this.circlePosition = -newPosition;
         
         const percentage = newPosition / this.trackHeight;
-        this.currentValue = Math.round(15 + (percentage * 10));
+        this.currentValue = Math.round(15 + (percentage * 15));
       }
     };
 

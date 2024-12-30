@@ -51,7 +51,7 @@ export class TextCardComponent implements OnChanges {
     const weekday = date.toLocaleDateString('de-DE', { weekday: 'short' });
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    return `${weekday} ${day}.${month}`;
+    return `${weekday} ${day}.${month}.`;
   }
 
   formatTime(time: string | Date): string {

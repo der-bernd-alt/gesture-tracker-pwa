@@ -1,8 +1,8 @@
-<div class="chart-container">
-  <canvas #chartCanvas></canvas>
+<div>
+  <canvas class="chart-canvas" #chartCanvas></canvas>
 </div>
-<div class="btn-group mx-4" role="group" aria-label="Basic example">
-  <button type="button" class="btn btn-outline-primary" (click)="setTimeFrame('today')" [class.active]="timeFrame === 'today'">Today</button>
-  <button type="button" class="btn btn-outline-primary" (click)="setTimeFrame('week')" [class.active]="timeFrame === 'week'">This week</button>
-  <button type="button" class="btn btn-outline-primary" (click)="setTimeFrame('month')" [class.active]="timeFrame === 'month'">This month</button>
+<div class="btn-group mx-4 mb-2" role="group" aria-label="Basic example">
+  <button type="button" class="btn btn-outline-primary" (click)="setTimeFrame('today')" [class.active]="timeFrame === 'today'">Heute</button>
+  <button type="button" class="btn btn-outline-primary" (click)="setTimeFrame('week')" [class.active]="timeFrame === 'week'">Diese Woche</button>
+  <button type="button" class="btn btn-outline-primary" (click)="setTimeFrame('month')" [class.active]="timeFrame === 'month'">Dieser Monat</button>
 </div>
