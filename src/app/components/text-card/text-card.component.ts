@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit, ElementRef, Renderer2, AfterViewInit } from '@angular/core';
 import { PushUpSet } from '../../models/push-up-set.model';
 
 interface DailyPushUps {
@@ -12,14 +12,34 @@ interface DailyPushUps {
   templateUrl: './text-card.component.html',
   styleUrls: ['./text-card.component.css']
 })
-export class TextCardComponent implements OnChanges {
+export class TextCardComponent implements OnInit {
   @Input() sets: PushUpSet[] = [];
   dailyPushUps: DailyPushUps[] = [];
+  private allDailyPushUps: DailyPushUps[] = [];
+  private loadCount: number = 20;
 
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['sets']) {
-      this.dailyPushUps = this.groupSetsByDay(this.sets);
+  constructor(private el: ElementRef, private renderer: Renderer2) { }
+
+  ngOnInit() {
+    this.allDailyPushUps = this.groupSetsByDay(this.sets);
+    this.dailyPushUps = this.allDailyPushUps.slice(0, this.loadCount);
+
+    const contentElement = document.querySelector('.content') as HTMLElement;
+    if (contentElement) {
+      this.renderer.listen(contentElement, 'scroll', () => this.onScroll(contentElement));
     }
+  }
+
+  private onScroll(contentElement: HTMLElement): void {
+    if ((contentElement.scrollTop + contentElement.clientHeight) >= contentElement.scrollHeight - 300) {
+      this.loadMoreDays();
+    }
+  }
+
+  private loadMoreDays(): void {
+    const currentLength = this.dailyPushUps.length;
+    const moreDays = this.allDailyPushUps.slice(currentLength, currentLength + this.loadCount);
+    this.dailyPushUps = [...this.dailyPushUps, ...moreDays];
   }
 
   private groupSetsByDay(sets: PushUpSet[]): DailyPushUps[] {
@@ -44,7 +64,7 @@ export class TextCardComponent implements OnChanges {
     });
 
     return Array.from(grouped.values())
-      .sort((a, b) => b.date.getTime() - a.date.getTime());
+      .sort((a, b) => b.date.getTime() - a.date.getTime())
   }
 
   formatDate(date: Date): string {

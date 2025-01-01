@@ -1,6 +1,5 @@
 <div class="card-container">
-  <div *ngFor="let day of dailyPushUps" 
-       class="card border-primary shadow p-2 mb-2">
+  <div *ngFor="let day of dailyPushUps" class="card border-primary shadow p-2 mb-2">
     <div class="card-header p-2 bg-white text-primary fw-bold">
       <div class="row">
         <div class="col">
@@ -21,5 +20,11 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="alert alert-secondary" role="alert">
+    <h4 class="alert-heading">Keine weiteren Tage</h4>
+    <p>Wir haben keine weiteren Tage anzuzeigen. Mache ein paar Liegestütze und dann wird die Liste automatisch länger.
+    </p>
   </div>
 </div>
