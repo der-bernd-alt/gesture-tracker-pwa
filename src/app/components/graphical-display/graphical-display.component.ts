@@ -11,6 +11,7 @@ export class GraphicalDisplayComponent implements OnInit, AfterViewInit {
   @ViewChild('chartCanvas') chartCanvas!: ElementRef;
   private chart?: Chart;
   timeFrame: 'today' | 'week' | 'month' = 'today';
+  private expectedPerDay = 100;
 
   constructor(private databaseService: DatabaseService) {}
 
@@ -27,16 +28,16 @@ export class GraphicalDisplayComponent implements OnInit, AfterViewInit {
     this.initializeChart(); // Re-initialize the chart with the new time frame
   }
 
-  getExpectedValueForInterval(interval: 'today' | 'week' | 'month') {
+  getExpectedValueForInterval(interval: 'today' | 'week' | 'month', mode: "repetitions" | "scale") {
+    const additional = 50;
     let days = 1;
-    const expectedPerDay = 100, additional = 50
     if (interval === 'week') {
       days = 7;
     } else if (interval === 'month') {
       let date = new Date();
       days = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
     }
-    return Math.round(days * (expectedPerDay + additional));
+    return Math.round(days * (this.expectedPerDay + (mode === "repetitions" ? 0 : additional)));
   }
 
   private initializeChart() {
@@ -145,11 +146,42 @@ export class GraphicalDisplayComponent implements OnInit, AfterViewInit {
         data: {
           labels: labels,
           datasets: [{
-            label: "",
+            label: "Actual",
             data: data,
             borderColor: 'darkblue', // Dark blue color
             tension: 0.1,
             pointRadius: 0 // Do not display points
+          },
+          {
+            label: 'Expected',
+            data: Array(labels.length).fill(this.getExpectedValueForInterval(this.timeFrame, "repetitions")), // Create a flat line at the expected value
+            borderColor: 'lightgrey',
+            borderDash: [5, 5], // Create a dashed line
+            tension: 0,
+            pointRadius: 0,
+            borderWidth: 2
+          },
+          {
+            label: 'Current',
+            data: Array(labels.length).fill(null).map((_, index) => {
+              const now = new Date();
+              let currentIndex;
+              if (this.timeFrame === 'today') {
+                currentIndex = now.getHours() * 2 + Math.floor(now.getMinutes() / 30);
+              } else if (this.timeFrame === 'week') {
+                currentIndex = (now.getDay() + 6) % 7; // Adjust to start week on Monday
+              } else {
+                currentIndex = now.getDate() - 1;
+              }
+              return index === currentIndex ? data[currentIndex] : null;
+            }),
+            borderColor: 'darkblue',
+            backgroundColor: 'white',
+            pointRadius: 5,
+            pointStyle: 'circle',
+            borderWidth: 2,
+            order: -1, // This ensures it's drawn on top
+            showLine: false
           }]
         },
         options: {
@@ -157,7 +189,7 @@ export class GraphicalDisplayComponent implements OnInit, AfterViewInit {
           scales: {
             y: {
               beginAtZero: true,
-              max: this.getExpectedValueForInterval(this.timeFrame) // Set max based on time frame
+              max: this.getExpectedValueForInterval(this.timeFrame, "scale") // Set max based on time frame
             }
           },
           layout: {
@@ -169,18 +201,21 @@ export class GraphicalDisplayComponent implements OnInit, AfterViewInit {
           maintainAspectRatio: false,
           plugins: {
             tooltip: {
-              enabled: true, // Enable tooltips
-              mode: 'index', // Show tooltip for the index of the clicked point
-              intersect: false, // Allow tooltips to show when hovering over the chart
+              enabled: true,
+              mode: 'index',
+              intersect: false,
               callbacks: {
                 label: (tooltipItem) => {
-                  // Add " Uhr" suffix only for the 'today' time frame
-                  return `Bis hier ${tooltipItem.raw} Wdh.`; // Customize tooltip label
+                  if (tooltipItem.datasetIndex === 0) {
+                    return `Bis hier ${tooltipItem.raw} Wdh.`;
+                  } else {
+                    return `Ziel: ${tooltipItem.raw} Wdh.`;
+                  }
                 }
               }
             },
             legend: {
-              display: false // Do not show the legend
+              display: false
             }
           }
         }
