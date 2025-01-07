@@ -18,6 +18,15 @@ export class HumanMeshBackgroundComponent implements OnInit {
   private readonly PARTICLES_PER_JOINT = 700;
   private readonly PARTICLE_SIZE = 0.01;
   private readonly PARTICLE_RADIUS = 0.25;
+  private readonly CUBOID_PARTICLES = 2000;
+  private readonly SHOW_AXIS_HELPER = false;
+
+  // Animation parameters
+  private readonly radius = 5; // Same as initial camera.position.z
+  private readonly rotationSpeed = -0.5; // Rotations per second
+  private angle = 0;
+  private staticSpotLight!: THREE.SpotLight;
+  private movingSpotLight!: THREE.SpotLight;
 
   ngOnInit(): void {
     this.initThreeJS();
@@ -31,25 +40,28 @@ export class HumanMeshBackgroundComponent implements OnInit {
 
     // Setup camera
     this.camera = new THREE.PerspectiveCamera(
-      75,
+      50,
       window.innerWidth / window.innerHeight,
       0.1,
       1000
     );
+    this.camera.position.y = 1.5
     this.camera.position.z = 5;
+    this.camera.lookAt(0, 4, 0);
 
     // Setup renderer
     this.renderer = new THREE.WebGLRenderer();
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.rendererContainer.nativeElement.appendChild(this.renderer.domElement);
 
-    // Add OrbitControls
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
 
     // Add axis helper
-    const axesHelper = new THREE.AxesHelper(5);
-    this.scene.add(axesHelper);
+    if (this.SHOW_AXIS_HELPER) {
+      const axesHelper = new THREE.AxesHelper(5);
+      this.scene.add(axesHelper);
+    }
 
     // Create joints
     const jointRadius = 0.15;
@@ -90,7 +102,7 @@ export class HumanMeshBackgroundComponent implements OnInit {
       ],
       athlete: [
         // Head and neck
-        [0, 2.15, 0],     // Top of head
+        [0, 2.1, 0],     // Top of head
         [0, 1.55, 0],     // Neck
 
         // Torso and arms
@@ -115,8 +127,8 @@ export class HumanMeshBackgroundComponent implements OnInit {
     jointPositions.athlete.forEach(([x, y, z], index) => {
       // Create joint sphere
       let jointRadiusFactor = 1;
-      if(index == 0){
-        jointRadiusFactor = 2.5;
+      if (index == 0) {
+        jointRadiusFactor = 1.8;
       }
       const jointGeometry = new THREE.SphereGeometry(jointRadius * jointRadiusFactor, 16, 16);
       const joint = new THREE.Mesh(jointGeometry, jointMaterial);
@@ -124,7 +136,7 @@ export class HumanMeshBackgroundComponent implements OnInit {
       this.scene.add(joint);
 
       // Add particles around the joint
-      this.addParticlesAroundPoint(x, y, z);
+      this.addParticlesAroundPoint(x, y, z, jointRadiusFactor);
     });
 
     // Add lights for reflection
@@ -136,15 +148,42 @@ export class HumanMeshBackgroundComponent implements OnInit {
     this.scene.add(pointLight);
 
     // Add blue spotlight
-    const spotLight = new THREE.SpotLight(0x0066ff, 2);
-    spotLight.position.set(0, 1.5, 1);
-    spotLight.target.position.set(0, 1, 0);
-    spotLight.angle = Math.PI / 4;
-    spotLight.penumbra = 0.3;
-    spotLight.decay = 1;
-    spotLight.distance = 5;
-    this.scene.add(spotLight);
-    this.scene.add(spotLight.target);
+    const staticSpotLight = new THREE.SpotLight(0x0066ff, 4);
+    staticSpotLight.position.set(0, 1.5, 1);
+    staticSpotLight.target.position.set(0, 1, 0);
+    staticSpotLight.angle = Math.PI / 4;
+    staticSpotLight.penumbra = 0.3;
+    staticSpotLight.decay = 1;
+    staticSpotLight.distance = 5;
+    this.scene.add(staticSpotLight);
+    this.scene.add(staticSpotLight.target);
+    this.staticSpotLight = staticSpotLight;
+
+    const movingSpotLight = new THREE.SpotLight(0x00ffff, 10);
+    movingSpotLight.position.set(0, 1.5, 1);
+    movingSpotLight.target.position.set(0, 1, 0);
+    movingSpotLight.angle = Math.PI / 2;
+    movingSpotLight.penumbra = 0.3;
+    movingSpotLight.decay = 1;
+    movingSpotLight.distance = 5;
+    this.scene.add(movingSpotLight);
+    this.scene.add(movingSpotLight.target);
+    this.movingSpotLight = movingSpotLight;
+
+
+    // Add particle cuboid after other elements
+    this.addParticleCuboid(
+      { x: -5, y: -3, z: -3 },    // min bounds
+      { x: 5, y: 5, z: 3 },      // max bounds
+      this.CUBOID_PARTICLES / 3,
+      new THREE.Color(0x0066ff)
+    );
+    this.addParticleCuboid(
+      { x: -5, y: -3, z: -3 },    // min bounds
+      { x: 5, y: 5, z: 3 },      // max bounds
+      this.CUBOID_PARTICLES,
+      new THREE.Color(0xffffff)
+    );
 
     // Handle window resize
     window.addEventListener('resize', () => {
@@ -158,9 +197,18 @@ export class HumanMeshBackgroundComponent implements OnInit {
     requestAnimationFrame(() => this.animate());
     this.controls.update();
     this.renderer.render(this.scene, this.camera);
+
+    // Update camera position
+    this.camera.position.x = this.radius * Math.cos(this.angle);
+    this.camera.position.z = this.radius * Math.sin(this.angle);
+    this.angle += this.rotationSpeed * 0.005;
+
+    // Update spot light position
+    this.movingSpotLight.position.x = this.radius * Math.cos(this.angle);
+    this.movingSpotLight.position.z = this.radius * Math.sin(this.angle);
   }
 
-  private addParticlesAroundPoint(x: number, y: number, z: number): void {
+  private addParticlesAroundPoint(x: number, y: number, z: number, jointRadiusFactor: number): void {
     const particleGeometry = new THREE.BufferGeometry();
     const particleMaterial = new THREE.PointsMaterial({
       color: 0xffffff,
@@ -175,13 +223,48 @@ export class HumanMeshBackgroundComponent implements OnInit {
     for (let i = 0; i < this.PARTICLES_PER_JOINT; i++) {
       const theta = Math.random() * Math.PI * 2;
       const phi = Math.random() * Math.PI * 2;
-      const r = Math.random() * this.PARTICLE_RADIUS;
+      const r = Math.random() * this.PARTICLE_RADIUS * jointRadiusFactor;
 
       const px = x + r * Math.sin(phi) * Math.cos(theta);
       const py = y + r * Math.sin(phi) * Math.sin(theta);
       const pz = z + r * Math.cos(phi);
 
       positions.push(px, py, pz);
+    }
+
+    particleGeometry.setAttribute(
+      'position',
+      new THREE.Float32BufferAttribute(positions, 3)
+    );
+
+    const particles = new THREE.Points(particleGeometry, particleMaterial);
+    this.scene.add(particles);
+  }
+
+  private addParticleCuboid(
+    min: { x: number; y: number; z: number },
+    max: { x: number; y: number; z: number },
+    particleCount: number,
+    color: THREE.Color
+  ): void {
+    const particleGeometry = new THREE.BufferGeometry();
+    const particleMaterial = new THREE.PointsMaterial({
+      color: color,
+      size: 0.01,
+      transparent: true,
+      opacity: 0.4,
+      sizeAttenuation: true
+    });
+
+    const positions: number[] = [];
+
+    // Generate random particles within the cuboid bounds
+    for (let i = 0; i < particleCount; i++) {
+      const x = min.x + Math.random() * (max.x - min.x);
+      const y = min.y + Math.random() * (max.y - min.y);
+      const z = min.z + Math.random() * (max.z - min.z);
+
+      positions.push(x, y, z);
     }
 
     particleGeometry.setAttribute(
