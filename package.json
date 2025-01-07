@@ -20,10 +20,12 @@
     "@angular/router": "^15.0.0",
     "@types/chart.js": "^2.9.37",
     "@types/node": "^22.10.2",
+    "@types/three": "^0.172.0",
     "chart.js": "^4.0.0",
     "chartjs-adapter-date-fns": "^3.0.0",
     "date-fns": "^2.30.0",
     "rxjs": "~7.5.0",
+    "three": "^0.172.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.12.0"
   },

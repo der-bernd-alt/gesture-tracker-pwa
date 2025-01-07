@@ -25,6 +25,7 @@ import { FormsModule } from '@angular/forms';
 import { DragCircleComponent } from './components/drag-circle/drag-circle.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { HumanMeshBackgroundComponent } from './human-mesh-background/human-mesh-background.component';
 
 Chart.register(
   TimeScale,
@@ -42,7 +43,8 @@ Chart.register(
     GraphicalDisplayComponent,
     TextCardComponent,
     AddPushUpsDialogComponent,
-    DragCircleComponent
+    DragCircleComponent,
+    HumanMeshBackgroundComponent
   ],
   imports: [
     BrowserModule,
