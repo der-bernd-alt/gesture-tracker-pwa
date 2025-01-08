@@ -148,14 +148,14 @@ export class GraphicalDisplayComponent implements OnInit, AfterViewInit {
           datasets: [{
             label: "Actual",
             data: data,
-            borderColor: 'darkblue', // Dark blue 
+            borderColor: 'darkblue', // Dark blue color
             tension: 0.1,
             pointRadius: 0 // Do not display points
           },
           {
             label: 'Expected',
             data: Array(labels.length).fill(this.getExpectedValueForInterval(this.timeFrame, "repetitions")), // Create a flat line at the expected value
-            borderColor: 'darkblue',
+            borderColor: 'lightgrey',
             borderDash: [5, 5], // Create a dashed line
             tension: 0,
             pointRadius: 0,
@@ -189,15 +189,7 @@ export class GraphicalDisplayComponent implements OnInit, AfterViewInit {
           scales: {
             y: {
               beginAtZero: true,
-              max: this.getExpectedValueForInterval(this.timeFrame, "scale"), // Set max based on time frame
-              grid: {
-                color: 'rgba(255, 255, 255, 0.1)'
-              }
-            },
-            x: {
-              grid: {
-                color: 'rgba(255, 255, 255, 0.1)'
-              }
+              max: this.getExpectedValueForInterval(this.timeFrame, "scale") // Set max based on time frame
             }
           },
           layout: {
