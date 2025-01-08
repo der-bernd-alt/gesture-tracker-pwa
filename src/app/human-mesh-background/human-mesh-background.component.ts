@@ -20,10 +20,11 @@ export class HumanMeshBackgroundComponent implements OnInit {
   private readonly PARTICLE_RADIUS = 0.25;
   private readonly CUBOID_PARTICLES = 2000;
   private readonly SHOW_AXIS_HELPER = false;
+  private readonly IS_CAMERA_MOVING = true;
 
   // Animation parameters
   private readonly radius = 5; // Same as initial camera.position.z
-  private readonly rotationSpeed = -0.5; // Rotations per second
+  private readonly rotationSpeed = 0.5; // Rotations per second
   private angle = 0;
   private staticSpotLight!: THREE.SpotLight;
   private movingSpotLight!: THREE.SpotLight;
@@ -170,6 +171,39 @@ export class HumanMeshBackgroundComponent implements OnInit {
     this.scene.add(movingSpotLight.target);
     this.movingSpotLight = movingSpotLight;
 
+    // Add text plane (add this before the particle cuboid)
+    const canvas = document.createElement('canvas');
+    const context = canvas.getContext('2d');
+    if (context) {
+      canvas.width = 50;
+      canvas.height = 25;
+      
+      // Set background transparent
+      context.fillStyle = 'rgba(255, 255, 255, 0.3)';
+      context.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Add text
+      context.font = 'bold 9px Arial';
+      context.fillStyle = 'white';
+      context.textAlign = 'center';
+      context.textBaseline = 'middle';
+      context.fillText('#TEAM', 25, 6);
+      context.fillText('BERND', 25, 20);
+      
+      const texture = new THREE.CanvasTexture(canvas);
+      const material = new THREE.MeshBasicMaterial({
+        map: texture,
+        transparent: true,
+        opacity: 0.8,
+        side: THREE.DoubleSide
+      });
+      
+      const geometry = new THREE.PlaneGeometry(0.4, 0.4);
+      const textPlane = new THREE.Mesh(geometry, material);
+      textPlane.position.set( 0, 1.5, 0.3); // Position in front of the chest
+      textPlane.rotation.x = -0.2; // Slight tilt
+      this.scene.add(textPlane);
+    }
 
     // Add particle cuboid after other elements
     this.addParticleCuboid(
@@ -199,9 +233,11 @@ export class HumanMeshBackgroundComponent implements OnInit {
     this.renderer.render(this.scene, this.camera);
 
     // Update camera position
-    this.camera.position.x = this.radius * Math.cos(this.angle);
-    this.camera.position.z = this.radius * Math.sin(this.angle);
-    this.angle += this.rotationSpeed * 0.005;
+    if (this.IS_CAMERA_MOVING) {
+      this.camera.position.x = this.radius * Math.cos(this.angle);
+      this.camera.position.z = this.radius * Math.sin(this.angle);
+      this.angle += this.rotationSpeed * 0.005;
+    }
 
     // Update spot light position
     this.movingSpotLight.position.x = this.radius * Math.cos(this.angle);

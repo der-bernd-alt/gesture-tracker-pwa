@@ -3,8 +3,8 @@
 <div class="home-container">
 
   <ng-container *ngIf="activeView === 'graph'">
-    <div class="card bg-transparent opacity-80" data-bs-theme="dark">
-      <div class="card-header bg-transparent opacity-80">
+    <div class="card bg-transparent" data-bs-theme="dark">
+      <div class="card-header">
         <div class="row">
           <div class="col-8">
             <h1 class="card-title text-white">Hi, Bernd</h1>
@@ -29,7 +29,7 @@
       Update durchführen
     </mat-checkbox>
   </div> -->
-  <div class="shadow-lg border-top">
+  <div class="shadow-lg border-top bg-white">
     <div class="nav-buttons">
       <button mat-button [class.active]="activeView === 'graph'" (click)="activeView = 'graph'">
         <mat-icon>show_chart</mat-icon>
