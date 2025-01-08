@@ -45,9 +45,9 @@ export class HumanMeshBackgroundComponent implements OnInit {
       0.1,
       1000
     );
-    this.camera.position.y = 1.5
+    this.camera.position.y = 4
     this.camera.position.z = 5;
-    this.camera.lookAt(0, 4, 0);
+    this.camera.lookAt(0, 3, 0);
 
     // Setup renderer
     this.renderer = new THREE.WebGLRenderer();
@@ -147,8 +147,8 @@ export class HumanMeshBackgroundComponent implements OnInit {
     pointLight.position.set(5, 5, 5);
     this.scene.add(pointLight);
 
-    // Add blue spotlight
-    const staticSpotLight = new THREE.SpotLight(0x0066ff, 4);
+    // Add spot light
+    const staticSpotLight = new THREE.SpotLight(0x00ffff, 4);
     staticSpotLight.position.set(0, 1.5, 1);
     staticSpotLight.target.position.set(0, 1, 0);
     staticSpotLight.angle = Math.PI / 4;
@@ -159,7 +159,7 @@ export class HumanMeshBackgroundComponent implements OnInit {
     this.scene.add(staticSpotLight.target);
     this.staticSpotLight = staticSpotLight;
 
-    const movingSpotLight = new THREE.SpotLight(0x00ffff, 10);
+    const movingSpotLight = new THREE.SpotLight(0xffffff, 10);
     movingSpotLight.position.set(0, 1.5, 1);
     movingSpotLight.target.position.set(0, 1, 0);
     movingSpotLight.angle = Math.PI / 2;

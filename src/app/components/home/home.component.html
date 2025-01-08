@@ -1,12 +1,14 @@
+<app-human-mesh-background></app-human-mesh-background>
+
 <div class="home-container">
 
   <ng-container *ngIf="activeView === 'graph'">
-    <div class="card">
-      <div class="card-header">
+    <div class="card bg-transparent opacity-80" data-bs-theme="dark">
+      <div class="card-header bg-transparent opacity-80">
         <div class="row">
           <div class="col-8">
-            <h1 class="card-title">Hi, Bernd</h1>
-            <p>Gut, dass du wieder da bist.</p>
+            <h1 class="card-title text-white">Hi, Bernd</h1>
+            <p class="text-white">Gut, dass du wieder da bist.</p>
           </div>
           <div class="col-4 d-flex align-items-center justify-content-center">
             <mat-checkbox [checked]="allowUpdates$ | async" (change)="onUpdateToggle($event)">
