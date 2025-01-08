@@ -40,11 +40,11 @@ Chart.register(
   declarations: [
     AppComponent,
     HomeComponent,
+    HumanMeshBackgroundComponent,
     GraphicalDisplayComponent,
     TextCardComponent,
     AddPushUpsDialogComponent,
     DragCircleComponent,
-    HumanMeshBackgroundComponent
   ],
   imports: [
     BrowserModule,

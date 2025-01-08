@@ -1,6 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { ThreeService } from '../services/three.service';
+// import * as THREE from 'three';
+// import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import type * as THREE from 'three';
+import type { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
 @Component({
   selector: 'app-human-mesh-background',
@@ -10,6 +13,8 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 export class HumanMeshBackgroundComponent implements OnInit {
   @ViewChild('rendererContainer', { static: true }) rendererContainer!: ElementRef;
 
+  private THREE!: any;
+  private OrbitControls!: any;
   private scene!: THREE.Scene;
   private camera!: THREE.PerspectiveCamera;
   private renderer!: THREE.WebGLRenderer;
@@ -29,18 +34,28 @@ export class HumanMeshBackgroundComponent implements OnInit {
   private staticSpotLight!: THREE.SpotLight;
   private movingSpotLight!: THREE.SpotLight;
 
-  ngOnInit(): void {
+  constructor( private threeService: ThreeService ) {
+    // this.threeService.loadThree().then(THREE => {
+    //   debugger
+    //   this.THREE = THREE;
+    //   this.OrbitControls = this.threeService.loadOrbitControls();
+    // });
+  }
+
+  async ngOnInit(): Promise<void> {
+    this.THREE = await this.threeService.loadThree();
+    this.OrbitControls = await this.threeService.loadOrbitControls();
     this.initThreeJS();
     this.animate();
   }
 
   private initThreeJS(): void {
     // Create scene
-    this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x000000);
+    this.scene = new this.THREE.Scene();
+    this.scene.background = new this.THREE.Color(0x000000);
 
     // Setup camera
-    this.camera = new THREE.PerspectiveCamera(
+    this.camera = new this.THREE.PerspectiveCamera(
       50,
       window.innerWidth / window.innerHeight,
       0.1,
@@ -51,22 +66,22 @@ export class HumanMeshBackgroundComponent implements OnInit {
     this.camera.lookAt(0, 3, 0);
 
     // Setup renderer
-    this.renderer = new THREE.WebGLRenderer();
+    this.renderer = new this.THREE.WebGLRenderer();
     this.renderer.setSize(window.innerWidth, window.innerHeight);
     this.rendererContainer.nativeElement.appendChild(this.renderer.domElement);
 
-    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+    this.controls = new this.OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
 
     // Add axis helper
     if (this.SHOW_AXIS_HELPER) {
-      const axesHelper = new THREE.AxesHelper(5);
+      const axesHelper = new this.THREE.AxesHelper(5);
       this.scene.add(axesHelper);
     }
 
     // Create joints
     const jointRadius = 0.15;
-    const jointMaterial = new THREE.MeshPhysicalMaterial({
+    const jointMaterial = new this.THREE.MeshPhysicalMaterial({
       color: 0xffffff,
       transparent: true,
       opacity: 0.6,
@@ -131,8 +146,8 @@ export class HumanMeshBackgroundComponent implements OnInit {
       if (index == 0) {
         jointRadiusFactor = 1.8;
       }
-      const jointGeometry = new THREE.SphereGeometry(jointRadius * jointRadiusFactor, 16, 16);
-      const joint = new THREE.Mesh(jointGeometry, jointMaterial);
+      const jointGeometry = new this.THREE.SphereGeometry(jointRadius * jointRadiusFactor, 16, 16);
+      const joint = new this.THREE.Mesh(jointGeometry, jointMaterial);
       joint.position.set(x, y, z);
       this.scene.add(joint);
 
@@ -141,15 +156,15 @@ export class HumanMeshBackgroundComponent implements OnInit {
     });
 
     // Add lights for reflection
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    const ambientLight = new this.THREE.AmbientLight(0xffffff, 0.5);
     this.scene.add(ambientLight);
 
-    const pointLight = new THREE.PointLight(0xffffff, 1);
+    const pointLight = new this.THREE.PointLight(0xffffff, 1);
     pointLight.position.set(5, 5, 5);
     this.scene.add(pointLight);
 
     // Add spot light
-    const staticSpotLight = new THREE.SpotLight(0x00ffff, 4);
+    const staticSpotLight = new this.THREE.SpotLight(0x00ffff, 4);
     staticSpotLight.position.set(0, 1.5, 1);
     staticSpotLight.target.position.set(0, 1, 0);
     staticSpotLight.angle = Math.PI / 4;
@@ -160,7 +175,7 @@ export class HumanMeshBackgroundComponent implements OnInit {
     this.scene.add(staticSpotLight.target);
     this.staticSpotLight = staticSpotLight;
 
-    const movingSpotLight = new THREE.SpotLight(0xffffff, 10);
+    const movingSpotLight = new this.THREE.SpotLight(0xffffff, 10);
     movingSpotLight.position.set(0, 1.5, 1);
     movingSpotLight.target.position.set(0, 1, 0);
     movingSpotLight.angle = Math.PI / 2;
@@ -190,16 +205,16 @@ export class HumanMeshBackgroundComponent implements OnInit {
       context.fillText('#TEAM', 25, 6);
       context.fillText('BERND', 25, 20);
       
-      const texture = new THREE.CanvasTexture(canvas);
-      const material = new THREE.MeshBasicMaterial({
+      const texture = new this.THREE.CanvasTexture(canvas);
+      const material = new this.THREE.MeshBasicMaterial({
         map: texture,
         transparent: true,
         opacity: 0.8,
-        side: THREE.DoubleSide
+        side: this.THREE.DoubleSide
       });
       
-      const geometry = new THREE.PlaneGeometry(0.4, 0.4);
-      const textPlane = new THREE.Mesh(geometry, material);
+      const geometry = new this.THREE.PlaneGeometry(0.4, 0.4);
+      const textPlane = new this.THREE.Mesh(geometry, material);
       textPlane.position.set( 0, 1.5, 0.3); // Position in front of the chest
       textPlane.rotation.x = -0.2; // Slight tilt
       this.scene.add(textPlane);
@@ -210,13 +225,13 @@ export class HumanMeshBackgroundComponent implements OnInit {
       { x: -5, y: -3, z: -3 },    // min bounds
       { x: 5, y: 5, z: 3 },      // max bounds
       this.CUBOID_PARTICLES / 3,
-      new THREE.Color(0x0066ff)
+      new this.THREE.Color(0x0066ff)
     );
     this.addParticleCuboid(
       { x: -5, y: -3, z: -3 },    // min bounds
       { x: 5, y: 5, z: 3 },      // max bounds
       this.CUBOID_PARTICLES,
-      new THREE.Color(0xffffff)
+      new this.THREE.Color(0xffffff)
     );
 
     // Handle window resize
@@ -245,8 +260,8 @@ export class HumanMeshBackgroundComponent implements OnInit {
   }
 
   private addParticlesAroundPoint(x: number, y: number, z: number, jointRadiusFactor: number): void {
-    const particleGeometry = new THREE.BufferGeometry();
-    const particleMaterial = new THREE.PointsMaterial({
+    const particleGeometry = new this.THREE.BufferGeometry();
+    const particleMaterial = new this.THREE.PointsMaterial({
       color: 0xffffff,
       size: this.PARTICLE_SIZE,
       opacity: 0.8,
@@ -270,10 +285,10 @@ export class HumanMeshBackgroundComponent implements OnInit {
 
     particleGeometry.setAttribute(
       'position',
-      new THREE.Float32BufferAttribute(positions, 3)
+      new this.THREE.Float32BufferAttribute(positions, 3)
     );
 
-    const particles = new THREE.Points(particleGeometry, particleMaterial);
+    const particles = new this.THREE.Points(particleGeometry, particleMaterial);
     this.scene.add(particles);
   }
 
@@ -281,10 +296,10 @@ export class HumanMeshBackgroundComponent implements OnInit {
     min: { x: number; y: number; z: number },
     max: { x: number; y: number; z: number },
     particleCount: number,
-    color: THREE.Color
+    color: typeof THREE.Color
   ): void {
-    const particleGeometry = new THREE.BufferGeometry();
-    const particleMaterial = new THREE.PointsMaterial({
+    const particleGeometry = new this.THREE.BufferGeometry();
+    const particleMaterial = new this.THREE.PointsMaterial({
       color: color,
       size: 0.01,
       transparent: true,
@@ -305,10 +320,10 @@ export class HumanMeshBackgroundComponent implements OnInit {
 
     particleGeometry.setAttribute(
       'position',
-      new THREE.Float32BufferAttribute(positions, 3)
+      new this.THREE.Float32BufferAttribute(positions, 3)
     );
 
-    const particles = new THREE.Points(particleGeometry, particleMaterial);
+    const particles = new this.THREE.Points(particleGeometry, particleMaterial);
     this.scene.add(particles);
   }
 } 
