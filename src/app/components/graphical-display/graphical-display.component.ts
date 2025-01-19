@@ -159,7 +159,18 @@ export class GraphicalDisplayComponent implements OnInit, AfterViewInit {
             borderDash: [5, 5], // Create a dashed line
             tension: 0,
             pointRadius: 0,
-            borderWidth: 2
+            borderWidth: 3
+          },
+          {
+            label: 'Ideal',
+            data: Array(labels.length).fill(null).map((_, index) => 
+              (this.getExpectedValueForInterval(this.timeFrame, "repetitions") / (labels.length - 1)) * index
+            ),
+            borderColor: 'darkblue',
+            tension: 0,
+            pointRadius: 0,
+            borderWidth: 2,
+            borderDash: [3, 20]
           },
           {
             label: 'Current',
@@ -189,14 +200,20 @@ export class GraphicalDisplayComponent implements OnInit, AfterViewInit {
           scales: {
             y: {
               beginAtZero: true,
-              max: this.getExpectedValueForInterval(this.timeFrame, "scale"), // Set max based on time frame
+              max: this.getExpectedValueForInterval(this.timeFrame, "scale"),
               grid: {
                 color: 'rgba(255, 255, 255, 0.1)'
+              },
+              ticks: {
+                color: 'lightgrey'
               }
             },
             x: {
               grid: {
                 color: 'rgba(255, 255, 255, 0.1)'
+              },
+              ticks: {
+                color: 'lightgrey'
               }
             }
           },
