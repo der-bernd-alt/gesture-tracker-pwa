@@ -58,9 +58,23 @@ export class GraphicalDisplayComponent implements OnInit, AfterViewInit {
         startOfRange = new Date(today.getFullYear(), today.getMonth(), today.getDate());
         endOfRange = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 1);
       } else if (this.timeFrame === 'week') {
-        startOfRange = new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay());
-        endOfRange = new Date(startOfRange);
-        endOfRange.setDate(endOfRange.getDate() + 7);
+        
+        // Get last Monday (or today if it's Monday)
+        const dayOfWeek = today.getDay();
+        const daysFromMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1; // Convert Sunday (0) to 6, else subtract 1
+        startOfRange = new Date(today);
+        startOfRange.setDate(today.getDate() - daysFromMonday);
+        startOfRange.setHours(0, 0, 0, 0);
+
+        // Get next Sunday (or today if it's Sunday) 
+        endOfRange = new Date(today);
+        if (dayOfWeek === 0) { // If today is Sunday
+          endOfRange.setHours(23, 59, 59, 999);
+        } else {
+          const daysUntilSunday = 7 - dayOfWeek;
+          endOfRange.setDate(today.getDate() + daysUntilSunday);
+          endOfRange.setHours(23, 59, 59, 999);
+        }
       } else { // 'month'
         startOfRange = new Date(today.getFullYear(), today.getMonth(), 1);
         endOfRange = new Date(today.getFullYear(), today.getMonth() + 1, 1);
