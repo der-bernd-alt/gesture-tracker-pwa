@@ -11,8 +11,8 @@
             <p class="text-white">Gut, dass du wieder da bist.</p>
           </div>
           <div class="col-4 d-flex align-items-center justify-content-center">
-            <mat-checkbox [checked]="allowUpdates$ | async" (change)="onUpdateToggle($event)">
-              Update durchführen
+            <mat-checkbox [checked]="allowUpdates$ | async" (change)="onUpdateToggle($event)" class="mat-mdc-checkbox-white">
+              <span class="text-white">Update durchführen</span>
             </mat-checkbox>
           </div>
         </div>
